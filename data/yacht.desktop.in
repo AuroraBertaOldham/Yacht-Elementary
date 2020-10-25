@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Yacht
+GenericName=Yacht Game
+Comment=TODO
+Categories=Game;
+Exec=com.github.AuroraBertaOldham.Yacht-Elementary
+Icon=application-default-icon
+Terminal=false
+Type=Application
+Keywords=Dice;Yacht;Game;

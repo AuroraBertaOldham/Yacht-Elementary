@@ -1,0 +1,5 @@
+src/Application.vala
+src/Views/Welcome.vala
+src/Windows/NewGame.vala
+data/yacht.desktop.in
+data/yacht.appdata.xml.in
