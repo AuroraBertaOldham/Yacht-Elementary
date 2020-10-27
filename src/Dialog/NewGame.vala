@@ -82,7 +82,7 @@ public class NewGameWindow : Gtk.Dialog {
         players_grid.attach(player_list_action_bar, 0, 1, 1, 1);
          
         var add_player_button = new Gtk.Button.from_icon_name ("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-        add_player_button.tooltip_text = _("Add");
+        add_player_button.tooltip_text = _("Add Player");
 	    add_player_button.clicked.connect (() => {
 	        new_player_window.player = new Player.empty();
             new_player_window.show_all();
@@ -96,7 +96,7 @@ public class NewGameWindow : Gtk.Dialog {
 		        
         remove_player_button = new Gtk.Button.from_icon_name ("list-remove-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         remove_player_button.sensitive = false;
-        remove_player_button.tooltip_text = _("Remove");
+        remove_player_button.tooltip_text = _("Remove Player");
         remove_player_button.clicked.connect(() => {
             var row = (PlayerListRow)players_list_box.get_selected_row();
             _new_game.players.remove(row.player);

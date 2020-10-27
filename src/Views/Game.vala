@@ -17,5 +17,17 @@
 */
 
 public class GameView : Gtk.Grid {
-    
+
+    Game _game;
+
+
+
+    public Game game { 
+        get { 
+            return _game; 
+        } 
+        set {
+            _game = value;
+        } 
+    }
 }

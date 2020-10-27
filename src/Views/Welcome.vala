@@ -20,6 +20,12 @@ public class WelcomeView : Gtk.Grid {
 
     NewGameWindow new_game_window;
     ScoresWindow scores_window;
+    
+    Granite.Widgets.Welcome welcome_widget;
+    
+    int continue_game_button;
+    int new_game_button;
+    int scores_button;
 
     public WelcomeView() {
         new_game_window = new NewGameWindow();
@@ -30,26 +36,26 @@ public class WelcomeView : Gtk.Grid {
         scores_window.transient_for = (Gtk.Window)get_window();
         scores_window.modal = true;
         
-        var welcome_widget = new Granite.Widgets.Welcome(_("Welcome to Yacht"), _("How about a game?"));
+        welcome_widget = new Granite.Widgets.Welcome(_("Welcome to Yacht"), _("How about a game?"));
         
-        welcome_widget.append("input-gaming", _("Play"), _("Start a game with real or simulated players."));
-        welcome_widget.append("trophy-gold", _("View Scores"), _("View all time highscores."));
+        continue_game_button = welcome_widget.append("media-playback-start", _("Continue Game"), _("Resume your current game from where you left off."));
+        new_game_button = welcome_widget.append("input-gaming", _("New Game"), _("Start a new game with real or simulated players."));
+        scores_button = welcome_widget.append("trophy-gold", _("View Scores"), _("View all time highscores."));
         
         welcome_widget.activated.connect ((index) => {
-            switch (index) {
-                case 0:
-                    new_game_window.new_game = new Game();
-                    new_game_window.show_all();
-                    if (new_game_window.run() == 1) {
-                        game_started(new_game_window.new_game);
-                    }
-                    new_game_window.hide();
-                    break;
-                case 1:
-                    scores_window.show_all();
-                    scores_window.run();
-                    scores_window.hide();
-                    break;
+            if (index == continue_game_button) {
+                game_continued();
+            } else if (index == new_game_button) {
+                new_game_window.new_game = new Game();
+                new_game_window.show_all();
+                if (new_game_window.run() == 1) {
+                    game_started(new_game_window.new_game);
+                }
+                new_game_window.hide();
+            } else if (index == scores_button) {
+                scores_window.show_all();
+                scores_window.run();
+                scores_window.hide();
             }
         });
         
@@ -57,4 +63,10 @@ public class WelcomeView : Gtk.Grid {
     }
     
     public signal void game_started(Game game);
+    
+    public signal void game_continued();
+    
+    public void set_continue_allowed(bool allowed) {
+        welcome_widget.set_item_sensitivity(continue_game_button, allowed);
+    }
 }
