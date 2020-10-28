@@ -1,11 +1,16 @@
-# Based on build files for https://github.com/elementary/code
-
 project('com.github.AuroraBertaOldham.Yacht-Elementary', 'vala', 'c', version: '1.0.0')
 
 add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name()), language:'c')
 
+gnome = import('gnome')
+i18n = import('i18n')
+
+subdir('data')
+subdir('po')
+
 executable(
     meson.project_name(),
+    icons_gresource,
     'src/Application.vala',
     'src/MainWindow.vala',
     'src/Views/Welcome.vala',
@@ -24,8 +29,3 @@ executable(
     ],
     install: true
 )
-
-i18n = import('i18n')
-
-subdir('data')
-subdir('po')

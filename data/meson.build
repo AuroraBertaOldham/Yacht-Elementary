@@ -1,5 +1,3 @@
-# Based on build files for https://github.com/elementary/code
-
 icon_sizes = ['16', '24', '32', '48', '64', '128']
 
 foreach i : icon_sizes
@@ -28,4 +26,10 @@ i18n.merge_file(
     po_dir: join_paths(meson.source_root(), 'po'),
     install: true,
     install_dir: join_paths(get_option('datadir'), 'metainfo')
+)
+
+icons_gresource = gnome.compile_resources(
+    'gresource_icons',
+    'icons/icons.gresource.xml',
+    source_dir: 'icons'
 )

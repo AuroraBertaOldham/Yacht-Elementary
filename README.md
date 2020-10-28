@@ -10,3 +10,6 @@ A work in progress implementation of the [public domain dice game](https://en.wi
 
 ## License
 Licensed under [GPL 3](LICENSE).
+
+## Credits
+* Many of the default Elementary apps were referenced for help establishing the build system and designing the UI.

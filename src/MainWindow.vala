@@ -65,13 +65,14 @@ public class MainWindow : Gtk.ApplicationWindow {
         
         info_menu.show_all ();
                 
-        menu_button = new Gtk.Button.from_icon_name ("go-home", Gtk.IconSize.LARGE_TOOLBAR);
-        menu_button.tooltip_text = _("Go back to main menu");
+        menu_button = new Gtk.Button.with_label(_("Main Menu"));
         menu_button.no_show_all =true;
+        menu_button.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
+        menu_button.valign = Gtk.Align.CENTER;
 	    menu_button.clicked.connect (() => {
             go_to_welcome();
 	    });
-        header_bar.pack_end(menu_button);
+        header_bar.pack_start(menu_button);
                 
         view_stack = new Gtk.Stack();
         add(view_stack);

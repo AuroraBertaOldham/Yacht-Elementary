@@ -38,8 +38,8 @@ public class WelcomeView : Gtk.Grid {
         
         welcome_widget = new Granite.Widgets.Welcome(_("Welcome to Yacht"), _("How about a game?"));
         
-        continue_game_button = welcome_widget.append("media-playback-start", _("Continue Game"), _("Resume your current game from where you left off."));
-        new_game_button = welcome_widget.append("input-gaming", _("New Game"), _("Start a new game with real or simulated players."));
+        continue_game_button = welcome_widget.append("document-open-recent", _("Resume Game"), _("Continue your current game from where you left off."));
+        new_game_button = welcome_widget.append("media-playback-start", _("Start Game"), _("Begin a new game with real or simulated players."));
         scores_button = welcome_widget.append("trophy-gold", _("View Scores"), _("View all time highscores."));
         
         welcome_widget.activated.connect ((index) => {
