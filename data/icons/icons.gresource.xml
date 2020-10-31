@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="com/github/AuroraBertaOldham/Yacht-Elementary/icons">
+    <file alias="dice_none.svg">dice_none.svg</file>
     <file alias="dice_one.svg">dice_one.svg</file>
     <file alias="dice_two.svg">dice_two.svg</file>
     <file alias="dice_three.svg">dice_three.svg</file>

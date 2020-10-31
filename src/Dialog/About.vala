@@ -45,7 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.";
 
 	    wrap_license = true;
 
-	    website_label = "Github Repository";
+	    website_label = "GitHub Repository";
 	    website = "https://github.com/AuroraBertaOldham/Yacht-Elementary";
     }
 }

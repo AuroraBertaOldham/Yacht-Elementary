@@ -20,8 +20,44 @@ public class Game : Object {
     public unowned List<Player> players { get; set; }
     public uint current_turn { get; set; }
     
+    public uint rolls_remaining { get; set; }
+
+    public unowned List<Die> dice { get; set; }
+    
     public Game() {
         players = new List<Player>();
         players.append(new Player(Environment.get_real_name(), false));
+        
+        dice = new List<Die>();
+        dice.append(new Die());
+        dice.append(new Die());
+        dice.append(new Die());
+        dice.append(new Die());
+        dice.append(new Die());
+    }
+    
+    public void next_player() {
+        if (current_turn == players.length() - 1) {
+            current_turn = 0;
+        } else {
+            current_turn++;
+        }
+        rolls_remaining = 3;
+    }
+    
+    public void roll_dice() {
+        foreach (Die die in dice) {
+            die.roll();
+        }
+    }
+    
+    public uint count_held() {
+        var count = 0;
+        foreach (Die die in dice) {
+            if (die.hold) {
+                count++;
+            }
+        }
+        return count;
     }
 }

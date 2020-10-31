@@ -29,8 +29,8 @@ public class MainWindow : Gtk.ApplicationWindow {
     public MainWindow(Gtk.Application application) {
         Object(application: application);
     
-        default_width = 800;
-        default_height = 600;
+        default_width = 1000;
+        default_height = 800;
         
         
         about_dialog = new AboutDialog();

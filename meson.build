@@ -22,6 +22,7 @@ executable(
     'src/Widgets/PlayerListRow.vala',
     'src/Gameplay/Game.vala',
     'src/Gameplay/Player.vala',
+    'src/Gameplay/Die.vala',
     dependencies: [
         dependency('gtk+-3.0'),
         dependency('gdk-3.0'),
