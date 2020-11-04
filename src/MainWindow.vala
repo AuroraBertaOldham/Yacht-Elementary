@@ -33,8 +33,7 @@ public class MainWindow : Gtk.ApplicationWindow {
         default_height = 800;
         
         
-        about_dialog = new AboutDialog();
-                
+        about_dialog = new AboutDialog();             
         
         var header_bar = new Gtk.HeaderBar();
         header_bar.title = _("Yacht");

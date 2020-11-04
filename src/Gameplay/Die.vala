@@ -25,4 +25,9 @@ public class Die {
             side = Random.int_range(1, 7);
         }
     }
+    
+    public void reset() {
+        side = 0;
+        hold = false;
+    }
 }

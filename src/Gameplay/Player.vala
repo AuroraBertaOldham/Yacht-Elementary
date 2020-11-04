@@ -29,3 +29,7 @@ public class Player : Object {
         simulated = false;
     }
 }
+
+public class Scores {
+    
+}

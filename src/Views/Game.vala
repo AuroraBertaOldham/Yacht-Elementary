@@ -16,22 +16,24 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-public class GameView : Gtk.Grid {
+public class GameView : Gtk.Box {
 
     Game _game;
 
     List<Gtk.ToggleButton> dice_buttons;
-
     Gtk.Label turn_label;
     Gtk.Label holding_label;
     Gtk.Label rolls_remaining_label;
     Gtk.Button roll_button;
+    
+    Gtk.FlowBox players_flow_box;
 
     public GameView() {      
+        Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
     
         var dice_area_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         dice_area_box.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
-        attach(dice_area_box, 0, 0);
+        pack_start(dice_area_box, false, false, 0);
     
         var dice_area_grid = new Gtk.Grid();
         dice_area_grid.column_spacing = 12;
@@ -106,16 +108,23 @@ public class GameView : Gtk.Grid {
         roll_button.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
         roll_button.clicked.connect(() => {
             _game.roll_dice();
-            update_dice_images();
             update_states();
         });
         dice_area_grid.attach(roll_button, 3, 5, 3, 1);
         
-        attach(new Gtk.Separator(Gtk.Orientation.HORIZONTAL), 0, 1);
+        pack_start(new Gtk.Separator(Gtk.Orientation.HORIZONTAL), false, false, 0);
         
         var players_list_scroll = new Gtk.ScrolledWindow(null, null);
-        players_list_scroll.expand = true;
-        attach(players_list_scroll, 0, 2);
+        players_list_scroll.propagate_natural_height = false;
+        pack_start(players_list_scroll, true, true, 0);
+        
+        players_flow_box = new Gtk.FlowBox();
+        players_flow_box.orientation = Gtk.Orientation.VERTICAL;
+        players_flow_box.selection_mode = Gtk.SelectionMode.NONE;
+        players_flow_box.margin = 10;
+        players_flow_box.column_spacing = 10;
+        players_flow_box.row_spacing = 10;
+        players_list_scroll.add(players_flow_box);
     }
 
     public Game game { 
@@ -124,13 +133,33 @@ public class GameView : Gtk.Grid {
         } 
         set {
             _game = value;
+            create_cards();
+            update_states();
         } 
     }
     
+    void create_cards() {
+        foreach (var player in _game.players) {
+            var card = new PlayerCard();
+            card.show_all();
+            players_flow_box.add(card);
+        }
+    }
+    
     void update_states() {
+        var held_dice = _game.count_held();
+    
         turn_label.label = _("It's your turn %s").printf(_game.players.nth_data(_game.current_turn).name);
         rolls_remaining_label.label = _("%u Rolls Left").printf(_game.rolls_remaining);
-        holding_label.label = _("Holding %u").printf(_game.count_held());
+        holding_label.label = _("Holding %u").printf(held_dice);
+        
+        roll_button.sensitive = held_dice < 5 && _game.rolls_remaining > 0;
+        
+        for (var i = 0; i < 5; i++) {
+            dice_buttons.nth_data(i).sensitive = _game.rolls_remaining != 3;
+        }
+        
+        update_dice_images();
     }
     
     void update_dice_images() {

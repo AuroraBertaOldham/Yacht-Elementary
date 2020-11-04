@@ -28,6 +28,8 @@ public class Game : Object {
         players = new List<Player>();
         players.append(new Player(Environment.get_real_name(), false));
         
+        rolls_remaining = 3;
+        
         dice = new List<Die>();
         dice.append(new Die());
         dice.append(new Die());
@@ -42,10 +44,14 @@ public class Game : Object {
         } else {
             current_turn++;
         }
+        foreach (Die die in dice) {
+            die.reset();
+        }
         rolls_remaining = 3;
     }
     
     public void roll_dice() {
+        rolls_remaining--;
         foreach (Die die in dice) {
             die.roll();
         }
