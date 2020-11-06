@@ -44,8 +44,8 @@ public class PlayerListRow : Gtk.ListBoxRow {
         get { return _player; }
         set {
             _player = value;
-            name_label.label = _player.name;
-            if (_player.simulated) {
+            name_label.label = _player.info.name;
+            if (_player.info.simulated) {
                 simulated_label.show();
             } else {
                 simulated_label.hide();

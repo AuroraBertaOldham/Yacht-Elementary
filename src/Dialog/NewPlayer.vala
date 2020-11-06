@@ -18,7 +18,7 @@
 
 public class NewPlayerWindow : Gtk.Dialog {
 
-    Player _player;
+    PlayerInfo _player;
 
     Gtk.Entry name_entry;
     Gtk.Switch simulated_switch;
@@ -74,7 +74,7 @@ public class NewPlayerWindow : Gtk.Dialog {
         add_action_widget(add_player_button, 1);
     }
     
-    public Player player 
+    public PlayerInfo player 
     { 
         get { return _player; }
         set {

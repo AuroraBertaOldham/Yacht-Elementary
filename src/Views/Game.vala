@@ -134,6 +134,7 @@ public class GameView : Gtk.Box {
         set {
             _game = value;
             create_cards();
+            prepare();
             update_states();
         } 
     }
@@ -141,25 +142,48 @@ public class GameView : Gtk.Box {
     void create_cards() {
         foreach (var player in _game.players) {
             var card = new PlayerCard();
+            card.player = player;
             card.show_all();
             players_flow_box.add(card);
         }
     }
     
+    PlayerCard get_current_player_card() {
+        return (PlayerCard)players_flow_box.get_child_at_index((int)_game.current_turn);
+    }
+    
     void update_states() {
         var held_dice = _game.count_held();
     
-        turn_label.label = _("It's your turn %s").printf(_game.players.nth_data(_game.current_turn).name);
+        turn_label.label = _("It's your turn %s").printf(_game.players.nth_data(_game.current_turn).info.name);
         rolls_remaining_label.label = _("%u Rolls Left").printf(_game.rolls_remaining);
         holding_label.label = _("Holding %u").printf(held_dice);
         
         roll_button.sensitive = held_dice < 5 && _game.rolls_remaining > 0;
+        
+        PlayerCard card = get_current_player_card();
+        card.request_player_input(_game.dice);
+        card.is_focus = true;
         
         for (var i = 0; i < 5; i++) {
             dice_buttons.nth_data(i).sensitive = _game.rolls_remaining != 3;
         }
         
         update_dice_images();
+    }
+    
+    void prepare() {
+        PlayerCard card = get_current_player_card();
+        card.request_player_input(_game.dice);
+        card.player_input_done.connect(finish_player_score_input);
+    }
+    
+    void finish_player_score_input() {
+        PlayerCard card = get_current_player_card();
+        card.player_input_done.disconnect(finish_player_score_input);
+        _game.next_player();
+        prepare();
+        update_states();
     }
     
     void update_dice_images() {

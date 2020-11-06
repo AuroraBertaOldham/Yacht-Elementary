@@ -84,10 +84,10 @@ public class NewGameWindow : Gtk.Dialog {
         var add_player_button = new Gtk.Button.from_icon_name ("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
         add_player_button.tooltip_text = _("Add Player");
 	    add_player_button.clicked.connect (() => {
-	        new_player_window.player = new Player.empty();
+	        new_player_window.player = new PlayerInfo.empty();
             new_player_window.show_all();
             if (new_player_window.run() == 1) {
-                new_game.players.append(new_player_window.player);
+                new_game.players.append(new Player(new_player_window.player));
                 refresh_widgets();
             }
             new_player_window.hide();

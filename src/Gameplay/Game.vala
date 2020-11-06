@@ -26,7 +26,7 @@ public class Game : Object {
     
     public Game() {
         players = new List<Player>();
-        players.append(new Player(Environment.get_real_name(), false));
+        players.append(new Player(new PlayerInfo(Environment.get_real_name(), false)));
         
         rolls_remaining = 3;
         
