@@ -56,6 +56,7 @@ public class Scores : Object {
             null, // Fives
             null, // Sixes
             null, // Full House
+            null, // Three of a Kind
             null, // Four of a Kind
             null, // Little Straight
             null, // Big Straight
@@ -77,7 +78,7 @@ public class Scores : Object {
     }
     
     public uint sum() {
-        uint sum = 0;
+        uint sum = lower_bonus();
         foreach (uint? score in _scores) {
             if (score != null) {
                 sum += (uint)score;
@@ -86,32 +87,126 @@ public class Scores : Object {
         return sum;
     }
     
+    public uint sum_lower() {
+        uint sum = 0;
+        for (var i = 0; i < 6; i++) {
+            var score = _scores[i];
+            if (score != null) {
+                sum += (uint)score;
+            }
+        }
+        return sum;
+    }
+    
+    public uint lower_bonus() {
+        if (sum_lower() >= 63) {
+            return 35;
+        }
+        return 0;
+    }
+    
     public Scores get_potential_scores(List<Die> dice) {
         var scores = new Scores();
+        
+        var count_set = new Gee.HashMap<uint, uint>();
+        foreach (Die die in dice) {
+            var current = count_set.get(die.side);
+            count_set.set(die.side, current + 1);
+        }
+        
+        // Lower Section
+        
         for (var i = 0; i < 6; i++) {
             if (_scores[i] == null) {
-                scores._scores[i] = get_potential_lower_score(dice, i + 1);
+                var side = i + 1;
+                scores._scores[i] = count_set.get(side) * side;
             }
         }
         
+        // Full House
+        
         if (_scores[6] == null) {
-
-            
+            uint score = 0;
+            if (count_set.size == 2 && count_set.values.contains(2)) {
+                foreach (var dice_count in count_set) {
+                    score += dice_count.key * dice_count.value;
+                }
+            }
+            scores._scores[6] = score;
         }
+        
+        // Three of a Kind
+        
+        if (_scores[7] == null) {
+            uint score = 0;
+            foreach (var dice_count in count_set) {
+                if (dice_count.value >= 3) {
+                    score += dice_count.key * 3;
+                    break;
+                }
+            }
+            scores._scores[7] = score;
+        }
+        
+        // Four of a Kind
+        
+        if (_scores[8] == null) {
+            uint score = 0;
+            foreach (var dice_count in count_set) {
+                if (dice_count.value >= 4) {
+                    score += dice_count.key * 4;
+                    break;
+                }
+            }
+            scores._scores[8] = score;
+        }
+        
+        // Little Straight
+        
+        if (_scores[9] == null) {
+            uint score = 0;
+            if (count_set.size == 5 && !count_set.has_key(6)) {
+                score = 30;
+            }
+            scores._scores[9] = score;
+        }
+        
+        // Big Straight
+        
+        if (_scores[10] == null) {
+            uint score = 0;
+            if (count_set.size == 5 && !count_set.has_key(1)) {
+                score = 30;
+            }
+            scores._scores[10] = score;
+        }
+        
+        // Choice
+        
+        if (_scores[11] == null) {
+            uint score = 0;
+            foreach (var dice_count in count_set) {
+                score += dice_count.key * dice_count.value;
+            }
+            scores._scores[11] = score;
+        }
+        
+        // Yacht
+        
+        if (_scores[12] == null) {
+            uint score = 0;
+            if (count_set.size == 1 && !count_set.has_key(0)) {
+                score = 50;
+            }
+            scores._scores[12] = score;
+        }
+        
         
         return scores;
     }
-    
-    uint? get_potential_lower_score(List<Die> dice, uint size) {
-        uint sum = 0;     
-        foreach (Die die in dice) {
-            if (die.side == size) {
-                sum += size;
-            }
-        }       
-        return sum;
-    }
 }
+
+const uint SCORE_CATEGORY_COUNT = 13;
 
 public enum ScoreCategory {
     ONES = 0,
@@ -121,9 +216,10 @@ public enum ScoreCategory {
     FIVES = 4,
     SIXES = 5,
     FULL_HOUSE = 6,
-    FOUR_OF_A_KIND = 7,
-    LITTLE_STRAIGHT = 8,
-    BIG_STRAIGHT = 9,
-    CHOICE = 10,
-    YACHT = 11
+    THREE_OF_A_KIND = 7,
+    FOUR_OF_A_KIND = 8,
+    LITTLE_STRAIGHT = 9,
+    BIG_STRAIGHT = 10,
+    CHOICE = 11,
+    YACHT = 12
 }

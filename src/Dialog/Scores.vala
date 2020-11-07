@@ -22,7 +22,7 @@ public class ScoresWindow : Gtk.Dialog {
         default_height = 450;
         deletable = false;
         resizable = false;
-        border_width = 5;
+        border_width = 10;
         title = _("Scores");
 
         var window_content = get_content_area();

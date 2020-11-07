@@ -31,7 +31,7 @@ public class NewGameWindow : Gtk.Dialog {
         default_height = 350;
         deletable = false;
         resizable = false;
-        border_width = 5;
+        border_width = 10;
         title = _("New Game");
 
         new_player_window = new NewPlayerWindow();
@@ -43,6 +43,7 @@ public class NewGameWindow : Gtk.Dialog {
         var main_grid = new Gtk.Grid ();
         main_grid.column_spacing = 12;
         main_grid.row_spacing = 8;
+        main_grid.margin_bottom = 5;
         window_content.add (main_grid);
         
         var players_icon = new Gtk.Image.from_icon_name("avatar-default", Gtk.IconSize.DIALOG);

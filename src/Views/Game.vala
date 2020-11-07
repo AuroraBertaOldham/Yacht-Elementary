@@ -176,6 +176,10 @@ public class GameView : Gtk.Box {
         PlayerCard card = get_current_player_card();
         card.request_player_input(_game.dice);
         card.player_input_done.connect(finish_player_score_input);
+        
+        for (var i = 0; i < 5; i++) {
+            dice_buttons.nth_data(i).active = false;
+        }
     }
     
     void finish_player_score_input() {

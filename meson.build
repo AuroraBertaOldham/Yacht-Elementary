@@ -27,7 +27,8 @@ executable(
     dependencies: [
         dependency('gtk+-3.0'),
         dependency('gdk-3.0'),
-        dependency('granite')
+        dependency('granite'),
+        dependency('gee-0.8')
     ],
     install: true
 )

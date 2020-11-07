@@ -30,7 +30,7 @@ public class NewPlayerWindow : Gtk.Dialog {
         default_height = 130;
         deletable = false;
         resizable = false;
-        border_width = 5;
+        border_width = 10;
         title = _("New Player");
 
         var window_content = get_content_area();
