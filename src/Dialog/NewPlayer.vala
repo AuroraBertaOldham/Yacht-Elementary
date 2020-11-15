@@ -70,7 +70,6 @@ public class NewPlayerWindow : Gtk.Dialog {
         
         add_player_button = new Gtk.Button.with_label(_("Add Player"));
         add_player_button.sensitive = false;
-        //add_player_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
         add_action_widget(add_player_button, 1);
     }
     

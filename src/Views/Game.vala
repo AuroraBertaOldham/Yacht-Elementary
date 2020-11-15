@@ -28,8 +28,12 @@ public class GameView : Gtk.Box {
     
     Gtk.FlowBox players_flow_box;
 
+    ResultsDialog results;
+
     public GameView() {      
         Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
+    
+        results = new ResultsDialog();
     
         var dice_area_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         dice_area_box.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
@@ -156,8 +160,8 @@ public class GameView : Gtk.Box {
         var held_dice = _game.count_held();
     
         turn_label.label = _("It's your turn %s").printf(_game.players.nth_data(_game.current_turn).info.name);
-        rolls_remaining_label.label = _("%u Rolls Left").printf(_game.rolls_remaining);
-        holding_label.label = _("Holding %u").printf(held_dice);
+        set_rolls_remaining_text(_game.rolls_remaining);
+        set_holding_text(held_dice);
         
         roll_button.sensitive = held_dice < 5 && _game.rolls_remaining > 0;
         
@@ -170,6 +174,27 @@ public class GameView : Gtk.Box {
         }
         
         update_dice_images();
+    }
+    
+    void set_rolls_remaining_text(uint remaining) {
+        rolls_remaining_label.label = _("%u Rolls Left").printf(remaining);
+    }
+    
+    void set_holding_text(uint amount) {
+        holding_label.label = _("Holding %u").printf(amount);
+    }
+    
+    void show_finished_display() {
+            turn_label.label = _("Game Over");
+            set_rolls_remaining_text(0);
+            set_holding_text(0);
+            roll_button.sensitive = false;
+            clear_dice_images();
+            
+            results.players = _game.players;
+            results.show_all();
+            results.run();
+            results.hide();
     }
     
     void prepare() {
@@ -185,14 +210,24 @@ public class GameView : Gtk.Box {
     void finish_player_score_input() {
         PlayerCard card = get_current_player_card();
         card.player_input_done.disconnect(finish_player_score_input);
-        _game.next_player();
-        prepare();
-        update_states();
+        if (_game.next_player()) {
+            prepare();
+            update_states();
+        }
+        else {
+            show_finished_display();
+        }
     }
     
     void update_dice_images() {
         for (var i = 0; i < 5; i++) {
             apply_die_image(dice_buttons.nth_data(i), _game.dice.nth_data(i));
+        }
+    }
+    
+    void clear_dice_images() {
+        for (var i = 0; i < 5; i++) {
+            clear_die_image(dice_buttons.nth_data(i));
         }
     }
     

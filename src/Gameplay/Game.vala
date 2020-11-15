@@ -38,16 +38,26 @@ public class Game : Object {
         dice.append(new Die());
     }
     
-    public void next_player() {
+    public bool next_player() {
         if (current_turn == players.length() - 1) {
             current_turn = 0;
         } else {
             current_turn++;
         }
+        
         foreach (Die die in dice) {
             die.reset();
         }
+        
         rolls_remaining = 3;
+        
+        foreach (var player in players) {
+            if (!player.scores.finished()) {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     public void roll_dice() {
