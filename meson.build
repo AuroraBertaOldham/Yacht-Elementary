@@ -21,6 +21,7 @@ executable(
     'src/Dialog/Results.vala',
     'src/Dialog/About.vala',
     'src/Widgets/PlayerListRow.vala',
+    'src/Widgets/ScoreListRow.vala',
     'src/Widgets/PlayerCard.vala',
     'src/Gameplay/Game.vala',
     'src/Gameplay/Player.vala',

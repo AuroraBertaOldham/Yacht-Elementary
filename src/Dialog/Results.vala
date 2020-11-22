@@ -24,8 +24,8 @@ public class ResultsDialog : Gtk.Dialog {
     unowned List<Player> _players;
     
     public ResultsDialog() {
-        default_width = 500;
-        default_height = 600;
+        default_width = 450;
+        default_height = 450;
         deletable = false;
         resizable = false;
         border_width = 10;
@@ -55,6 +55,7 @@ public class ResultsDialog : Gtk.Dialog {
         player_list_frame.add(players_list_scroll);
       
         players_list = new Gtk.ListBox();
+        players_list.selection_mode = Gtk.SelectionMode.NONE;
         players_list_scroll.add(players_list);
         
         var rematch_button = new Gtk.Button.with_label(_("Rematch"));          
@@ -75,7 +76,12 @@ public class ResultsDialog : Gtk.Dialog {
         } 
     }
     
-    void update_states() {
+    void update_states() {    
+        foreach (Gtk.Widget row in players_list.get_children ()) {
+            row.destroy();
+        }
+    
+        var playerCount = _players.length();
         var ordered_scores = _players.copy();
         
         ordered_scores.sort((left, right) => {
@@ -87,5 +93,12 @@ public class ResultsDialog : Gtk.Dialog {
         var winner = ordered_scores.nth_data(0);
         
         winner_label.label = _("%s Wins").printf(winner.info.name);
+        
+        for (var i = 0; i < playerCount; i++) {
+            var score_row = new ScoreListRow();
+            score_row.player = _players.nth_data(i);
+            score_row.show_all();
+            players_list.add(score_row);
+        }
     }
 }

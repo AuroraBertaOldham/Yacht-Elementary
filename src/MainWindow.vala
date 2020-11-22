@@ -87,6 +87,9 @@ public class MainWindow : Gtk.ApplicationWindow {
         view_stack.add(welcome_view);
         
         game_view = new GameView();
+        game_view.game_finished.connect(() => {
+           go_to_welcome(); 
+        });
         view_stack.add(game_view);
         
         go_to_welcome();

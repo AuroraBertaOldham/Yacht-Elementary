@@ -38,6 +38,19 @@ public class Game : Object {
         dice.append(new Die());
     }
     
+    public void rematch() {
+        current_turn = 0;
+        rolls_remaining = 3;
+        
+        foreach (Die die in dice) {
+            die.reset();
+        }
+        
+        foreach (var player in players) {
+            player.scores = new Scores();
+        }
+    }
+    
     public bool next_player() {
         if (current_turn == players.length() - 1) {
             current_turn = 0;

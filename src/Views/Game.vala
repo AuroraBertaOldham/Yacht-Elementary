@@ -137,13 +137,21 @@ public class GameView : Gtk.Box {
         } 
         set {
             _game = value;
-            create_cards();
-            prepare();
-            update_states();
+            init_state();
         } 
     }
     
+    void init_state() {
+        create_cards();
+        prepare();
+        update_states();
+    }
+    
     void create_cards() {
+        foreach (Gtk.Widget card in players_flow_box.get_children ()) {
+            card.destroy();
+        }
+    
         foreach (var player in _game.players) {
             var card = new PlayerCard();
             card.player = player;
@@ -176,6 +184,8 @@ public class GameView : Gtk.Box {
         update_dice_images();
     }
     
+    public signal void game_finished();
+    
     void set_rolls_remaining_text(uint remaining) {
         rolls_remaining_label.label = _("%u Rolls Left").printf(remaining);
     }
@@ -185,16 +195,25 @@ public class GameView : Gtk.Box {
     }
     
     void show_finished_display() {
-            turn_label.label = _("Game Over");
-            set_rolls_remaining_text(0);
-            set_holding_text(0);
-            roll_button.sensitive = false;
-            clear_dice_images();
-            
-            results.players = _game.players;
-            results.show_all();
-            results.run();
-            results.hide();
+        turn_label.label = _("Game Over");
+        set_rolls_remaining_text(0);
+        set_holding_text(0);
+        roll_button.sensitive = false;
+        clear_dice_images();
+        
+        results.players = _game.players;
+        results.show_all();
+        switch (results.run()) {
+            case 0:
+                _game = null;
+                game_finished();
+                break;
+            case 1:
+                _game.rematch();
+                init_state();
+                break;
+        }
+        results.hide();
     }
     
     void prepare() {
